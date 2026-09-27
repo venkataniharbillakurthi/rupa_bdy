@@ -42,6 +42,7 @@ const wishEl = $('wish');
 
 const hero       = $('hero');
 const eyebrow    = $('eyebrow');
+const heroDeco   = $('heroDeco');
 const hint       = $('hint');
 const motes      = $('motes');
 const target     = $('target');
@@ -626,7 +627,8 @@ const kChars = [...line1Chars, ...line2Chars];
 /* drifting light motes behind the scene */
 function buildMotes(){
   motes.innerHTML = '';
-  for (let i = 0; i < 12; i++){
+  const moteN = isMobileView() ? 7 : 12;
+  for (let i = 0; i < moteN; i++){
     const m = document.createElement('span');
     m.className = 'mote';
     const s = rand(4, 12);
@@ -661,8 +663,11 @@ function refreshRig(){
   // the grip is anchored here, and the balloon sits at its layout centre (33% down,
   // centred) — using the layout point, not a live rect, keeps the aim steady even
   // while the balloon is scaling in.
-  const gripX = W * 0.24, gripY = H * 0.76;
-  const heartX = W * 0.5, heartY = H * 0.33;
+  const mobile = isMobileView();
+  const gripX = W * (mobile ? 0.50 : 0.24);
+  const gripY = H * (mobile ? 0.80 : 0.76);
+  const heartX = W * 0.5;
+  const heartY = H * (mobile ? 0.42 : 0.40);
   // rotation so local "up" (0,-1) maps to the grip→balloon direction
   const aimRad = Math.atan2(heartX - gripX, gripY - heartY);
   pullUX = -Math.sin(aimRad); pullUY = Math.cos(aimRad);  // opposite of aim = pull-back
@@ -806,7 +811,7 @@ function buildFilm(m){
    .to(arrow, { scaleY: 1.16, duration: 0.14, ease: 'power2.in' }, 0)
    .to(arrow, { scaleY: 1.0, duration: 0.1, ease: 'power1.out' }, 0.16)
    .to(aim, { opacity: 0, duration: 0.18 }, 0)
-   .to([eyebrow, hint], { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0);
+   .to([eyebrow, heroDeco, hint], { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0);
 
   // --- the strike: the arrow embeds, the balloon recoils, then holds pierced --
   t.add(burstHearts, 0.26)
@@ -928,6 +933,7 @@ function enter(){
   refreshRig();
   setDraw(0);
   gsap.set([eyebrow, hint], { opacity: 0, y: 14 });
+  gsap.set(heroDeco, { opacity: 0 });
   gsap.set(target, { opacity: 0, y: 10, scaleX: 0.9, scaleY: 0.9 });
   gsap.set(archery, { opacity: 0, scale: 0.85 });        // scale from the grip; keeps rotation
   gsap.set(heartGlow, { opacity: 0, scale: 1 });
@@ -936,6 +942,7 @@ function enter(){
   const tl = gsap.timeline({ onComplete: startBeat });
   tl.to(target,   { opacity: 1, y: 0, scaleX: 1, scaleY: 1, duration: 0.8, ease: 'power3.out' }, 0.1)
     .to(heartGlow,{ opacity: 0.7, duration: 0.8, ease: 'power2.out' }, 0.2)
+    .to(heroDeco, { opacity: 1, duration: 0.9, ease: 'power2.out' }, 0.18)
     .to(archery,  { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.28)
     .to(eyebrow,  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.4)
     .to(hint,     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.7);

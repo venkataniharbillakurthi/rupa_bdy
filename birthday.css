@@ -89,7 +89,7 @@ body{
 }
 
 .hero__eyebrow{
-  position:absolute; top:13%; left:0; right:0;
+  position:absolute; top:14%; left:0; right:0;
   text-align:center;
   font-family:"Cormorant Garamond", Georgia, serif;
   font-style:italic; font-weight:600;
@@ -99,10 +99,48 @@ body{
   text-shadow:0 1px 10px rgba(255,248,241,.9);
   opacity:0;                          /* GSAP reveals */
 }
+.hero__deco{
+  position:absolute; inset:0;
+  pointer-events:none;
+  opacity:0;
+}
+.deco-defs{
+  position:absolute; width:0; height:0; overflow:hidden;
+}
+.garland{
+  position:absolute; top:max(6px, env(safe-area-inset-top));
+  left:10%; right:10%; height:86px; width:auto;
+  filter:drop-shadow(0 4px 8px rgba(80,50,20,.16));
+}
+.deco{
+  position:absolute; width:clamp(150px, 24vw, 220px); height:auto;
+  filter:drop-shadow(0 8px 16px rgba(80,40,16,.2));
+}
+.deco--tl{ top:1%; left:0; }
+.deco--tr{ top:1%; right:0; }
+.deco--br{ bottom:5%; right:1%; width:clamp(120px, 18vw, 176px); }
+.side-balloon{
+  position:absolute;
+  width:52px;
+  height:auto;
+  overflow:visible;
+  filter:
+    drop-shadow(0 8px 14px rgba(160,50,20,.22))
+    drop-shadow(0 2px 4px rgba(80,30,10,.18));
+  animation:miniFloat 4.8s ease-in-out infinite;
+  transform-origin:50% 100%;
+}
+.side-balloon--a{ left:9%; top:30%; width:56px; animation-delay:-.6s; }
+.side-balloon--b{ right:9%; top:26%; width:48px; animation-delay:-1.9s; }
+.side-balloon--c{ left:15%; top:58%; width:40px; animation-delay:-3.1s; }
+@keyframes miniFloat{
+  0%,100%{ transform:translateY(0) rotate(-4deg); }
+  50%{ transform:translateY(-10px) rotate(5deg); }
+}
 
 /* ---- the target balloon (GSAP animates .target on the hit → fall → burst) ---- */
 .targetWrap{
-  position:absolute; top:33%; left:0; right:0;
+  position:absolute; top:40%; left:0; right:0;
   display:flex; justify-content:center;
   transform:translateY(-50%);         /* centre at 33% — wrap is NOT animated */
   pointer-events:none;
@@ -483,15 +521,52 @@ body{
    REDUCED MOTION — skip the film, hand over the finished tree
    ============================================================ */
 @media (max-width: 760px){
+  .hero__eyebrow{
+    top:max(86px, calc(env(safe-area-inset-top) + 78px));
+    font-size:clamp(15px, 4.2vw, 20px);
+    padding:0 18px;
+  }
+  .garland{ height:64px; left:4%; right:4%; }
+  .deco{ width:clamp(112px, 34vw, 148px); }
+  .deco--tl{ top:max(4px, env(safe-area-inset-top)); }
+  .deco--tr{ top:max(4px, env(safe-area-inset-top)); }
+  .deco--br, .side-balloon--c{ display:none; }
+  .side-balloon--a{ left:6%; top:28%; width:42px; }
+  .side-balloon--b{ right:6%; top:26%; width:36px; }
+  .targetWrap{ top:42%; }
+  .target{ width:clamp(118px, 34vw, 160px); }
+  .archery{ width:clamp(148px, 44vw, 196px); }
+  .hero__hint{
+    bottom:max(16px, calc(env(safe-area-inset-bottom) + 12px));
+    font-size:13px;
+    letter-spacing:.14em;
+    padding:0 16px;
+  }
+
+  .camera{ padding:12vh 4.5vw; gap:4px; }
+  .kEyebrow{ font-size:clamp(14px, 4.2vw, 18px); }
+  .hl__line{ flex-direction:column; align-items:center; gap:0.06em; }
+  .hl__word--sm{
+    font-size:clamp(22px, 7.4vw, 34px);
+    white-space:nowrap;
+  }
+  .hl__word--name{ font-size:clamp(40px, 16vw, 64px); }
+  .uline{ width:min(72vw, 260px); }
+  .kSub{ font-size:clamp(13px, 3.8vw, 17px); margin-top:10px; }
+  .bar{ height:9vh; }
+
   .wish{
-    left:5%; right:5%; bottom:8%;
+    left:5%; right:5%; bottom:max(8%, calc(env(safe-area-inset-bottom) + 28px));
     max-width:none;
     text-align:center;
   }
   .wish__hero{ font-size:clamp(28px, 8.4vw, 40px); }
   .wish__name{ display:block; }
   .wish__rule{ margin-inline:auto; transform-origin:center; }
-  .replay{ right:12px; bottom:12px; }
+  .replay{
+    right:12px;
+    bottom:max(12px, calc(env(safe-area-inset-bottom) + 8px));
+  }
 }
 @media (prefers-reduced-motion: reduce){
   .hero, .flood, .field, .bloom, .hero__ring{ display:none !important; }
